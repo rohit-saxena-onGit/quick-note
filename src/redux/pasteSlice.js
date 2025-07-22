@@ -1,10 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
+let pastesFromStorage = [];
+
+try {
+  const stored = localStorage.getItem("pastes");
+  pastesFromStorage = stored ? JSON.parse(stored) : [];
+} catch (error) {
+  console.error("Invalid JSON in localStorage for 'pastes':", error);
+  localStorage.removeItem("pastes"); 
+  pastesFromStorage = [];
+}
+
 const initialState = {
-  pastes: localStorage.getItem("pastes")
-    ? JSON.parse(localStorage.getItem("pastes"))
-    : [],
+  pastes: pastesFromStorage,
 };
 
 export const pasteSlice = createSlice({
@@ -17,6 +26,7 @@ export const pasteSlice = createSlice({
       localStorage.setItem("pastes", JSON.stringify(state.pastes));
       toast.success("Paste created successfully");
     },
+
     updateToPastes: (state, action) => {
       const paste = action.payload;
       const index = state.pastes.findIndex((item) => item._id === paste._id);
@@ -26,10 +36,7 @@ export const pasteSlice = createSlice({
         toast.success("Paste updated");
       }
     },
-    resetAllPastes: (state) => {
-      state.pastes = [];
-      localStorage.removeItem("pastes");
-    },
+
     removeFromPastes: (state, action) => {
       const pasteId = action.payload;
       const index = state.pastes.findIndex((item) => item._id === pasteId);
@@ -38,6 +45,11 @@ export const pasteSlice = createSlice({
         localStorage.setItem("pastes", JSON.stringify(state.pastes));
         toast.success("Paste deleted");
       }
+    },
+
+    resetAllPastes: (state) => {
+      state.pastes = [];
+      localStorage.removeItem("pastes");
     },
   },
 });
