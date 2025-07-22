@@ -1,6 +1,6 @@
 import { ViewPaste } from "./components/ViewPaste";
-import Navbar from "./components/Navbar"; // ✅ Correct case
-import { Home } from "./components/home";
+import Navbar from "./components/Navbar";
+import { Home } from "./components/Home";
 import { Paste } from "./components/Paste";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
